@@ -16,40 +16,59 @@
     <script src="https://kit.fontawesome.com/c1e8c6306e.js" crossorigin="anonymous"></script>
 </head>
 <body>
-<!-- Site Closure Announcement Popup -->
+<!-- Site Closure Full-Screen Blocker -->
 <style>
-.site-closure-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInOverlay .3s ease}@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}.site-closure-popup{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:40px 36px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUpPopup .4s ease}@keyframes slideUpPopup{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}.site-closure-popup .closure-icon{font-size:48px;margin-bottom:16px}.site-closure-popup .closure-title{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:16px;line-height:1.4}.site-closure-popup .closure-message{font-size:15px;color:#444;line-height:1.7;margin-bottom:8px}.site-closure-popup .closure-date{display:inline-block;background:#fff3cd;color:#856404;font-weight:600;padding:6px 18px;border-radius:8px;margin:12px 0;font-size:15px}.site-closure-popup .closure-thanks{font-size:14px;color:#777;margin-top:8px;font-style:italic}.site-closure-popup .closure-dismiss{margin-top:24px;background:#1a1a2e;color:#fff;border:none;padding:12px 36px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}.site-closure-popup .closure-dismiss:hover{background:#16213e}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{overflow:hidden!important;height:100%!important;width:100%!important}
+.site-blocker{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;pointer-events:all}
+.site-blocker-content{text-align:center;max-width:560px;width:100%;color:#fff}
+.site-blocker-content .blocker-icon{font-size:64px;margin-bottom:24px;opacity:.9}
+.site-blocker-content .blocker-title{font-size:26px;font-weight:700;margin-bottom:20px;line-height:1.3;letter-spacing:-.5px}
+.site-blocker-content .blocker-divider{width:60px;height:3px;background:rgba(255,255,255,.3);margin:0 auto 24px;border-radius:2px}
+.site-blocker-content .blocker-message{font-size:16px;color:rgba(255,255,255,.85);line-height:1.8;margin-bottom:12px}
+.site-blocker-content .blocker-date{display:inline-block;background:rgba(255,193,7,.15);border:1px solid rgba(255,193,7,.3);color:#ffd54f;font-weight:700;padding:10px 28px;border-radius:10px;margin:16px 0;font-size:18px;letter-spacing:.5px}
+.site-blocker-content .blocker-note{font-size:14px;color:rgba(255,255,255,.5);margin-top:20px;line-height:1.6}
+.site-blocker-content .blocker-thanks{font-size:15px;color:rgba(255,255,255,.65);margin-top:16px;font-style:italic}
 </style>
-<div class="site-closure-overlay" id="siteClosurePopup">
-  <div class="site-closure-popup">
-    <div class="closure-icon">🔔</div>
-    <div class="closure-title">Thông báo ngừng hoạt động</div>
-    <div class="closure-message">
-      Website này sẽ chính thức ngừng hoạt động vào ngày
+<div class="site-blocker" id="siteBlocker">
+  <div class="site-blocker-content">
+    <div class="blocker-icon">⚠️</div>
+    <div class="blocker-title">Website đã ngừng hoạt động</div>
+    <div class="blocker-divider"></div>
+    <div class="blocker-message">
+      Trang web này chính thức đóng cửa từ ngày
     </div>
-    <div class="closure-date">📅 16/05/2026</div>
-    <div class="closure-message">
-      Toàn bộ nội dung và dữ liệu trên trang sẽ bị xóa.<br>
-      Website sẽ không còn được quản lý bởi người tạo.
+    <div class="blocker-date">📅 17/05/2025</div>
+    <div class="blocker-message">
+      Toàn bộ nội dung và dữ liệu trên trang đã bị xóa.<br>
+      Website không còn được quản lý bởi người tạo.
     </div>
-    <div class="closure-thanks">Cảm ơn bạn đã ủng hộ trong thời gian qua. 💛</div>
-    <button class="closure-dismiss" onclick="dismissClosure()">Đã hiểu</button>
+    <div class="blocker-thanks">Cảm ơn bạn đã ủng hộ trong thời gian qua.</div>
+    <div class="blocker-note">Tên miền sẽ hết hạn và website sẽ ngừng tồn tại trong thời gian tới.</div>
   </div>
 </div>
 <script>
+// Block all interaction with page content
 (function(){
-  if(document.cookie.indexOf('site_closed_ack=1')!==-1){
-    var p=document.getElementById('siteClosurePopup');
-    if(p)p.style.display='none';
-  }
+  var b=document.getElementById('siteBlocker');
+  if(!b)return;
+  // Prevent any click from going through
+  b.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();},true);
+  document.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();},true);
+  // Prevent scrolling
+  document.body.style.overflow='hidden';
+  document.documentElement.style.overflow='hidden';
+  // Prevent keyboard dismiss (Escape etc)
+  document.addEventListener('keydown',function(e){e.preventDefault();e.stopPropagation();},true);
+  // Re-enforce on focus/visibility change
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden){b.style.display='flex';document.body.style.overflow='hidden';}
+  });
 })();
-function dismissClosure(){
-  var p=document.getElementById('siteClosurePopup');
-  if(p)p.style.display='none';
-  document.cookie='site_closed_ack=1;path=/;max-age=604800';
-}
 </script>
-<!-- End Site Closure Popup -->
+<!-- End Site Closure Blocker -->
+
+
 
 <!-- menu for ipad and smaller screens=> slide in/out -->
     <div class="menu-background" id="small-screen-menu">
