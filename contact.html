@@ -9,6 +9,41 @@
         <script src="https://kit.fontawesome.com/c1e8c6306e.js" crossorigin="anonymous"></script>
     </head>
     <body>
+<!-- Site Closure Announcement Popup -->
+<style>
+.site-closure-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInOverlay .3s ease}@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}.site-closure-popup{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:40px 36px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUpPopup .4s ease}@keyframes slideUpPopup{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}.site-closure-popup .closure-icon{font-size:48px;margin-bottom:16px}.site-closure-popup .closure-title{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:16px;line-height:1.4}.site-closure-popup .closure-message{font-size:15px;color:#444;line-height:1.7;margin-bottom:8px}.site-closure-popup .closure-date{display:inline-block;background:#fff3cd;color:#856404;font-weight:600;padding:6px 18px;border-radius:8px;margin:12px 0;font-size:15px}.site-closure-popup .closure-thanks{font-size:14px;color:#777;margin-top:8px;font-style:italic}.site-closure-popup .closure-dismiss{margin-top:24px;background:#1a1a2e;color:#fff;border:none;padding:12px 36px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}.site-closure-popup .closure-dismiss:hover{background:#16213e}
+</style>
+<div class="site-closure-overlay" id="siteClosurePopup">
+  <div class="site-closure-popup">
+    <div class="closure-icon">🔔</div>
+    <div class="closure-title">Thông báo ngừng hoạt động</div>
+    <div class="closure-message">
+      Website này sẽ chính thức ngừng hoạt động vào ngày
+    </div>
+    <div class="closure-date">📅 16/05/2026</div>
+    <div class="closure-message">
+      Toàn bộ nội dung và dữ liệu trên trang sẽ bị xóa.<br>
+      Website sẽ không còn được quản lý bởi người tạo.
+    </div>
+    <div class="closure-thanks">Cảm ơn bạn đã ủng hộ trong thời gian qua. 💛</div>
+    <button class="closure-dismiss" onclick="dismissClosure()">Đã hiểu</button>
+  </div>
+</div>
+<script>
+(function(){
+  if(document.cookie.indexOf('site_closed_ack=1')!==-1){
+    var p=document.getElementById('siteClosurePopup');
+    if(p)p.style.display='none';
+  }
+})();
+function dismissClosure(){
+  var p=document.getElementById('siteClosurePopup');
+  if(p)p.style.display='none';
+  document.cookie='site_closed_ack=1;path=/;max-age=604800';
+}
+</script>
+<!-- End Site Closure Popup -->
+
     <!-- menu for ipad and smaller screens=> slide in/out -->
         <div class="menu-background" id="small-screen-menu">
             <div class="responsive-menu">
