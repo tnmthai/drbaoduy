@@ -74,70 +74,9 @@
 </script>
 <!-- End Site Closure Notice -->
 
-<!-- Site Closure Notice — phase 1: popup until 16/05, phase 2: blocker from 17/05 -->
-<style>
-/* --- Phase 1: Dismissable popup --- */
-.closure-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeInOverlay .3s ease}@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}.closure-popup{background:#fff;border-radius:16px;max-width:520px;width:100%;padding:40px 36px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:slideUpPopup .4s ease}@keyframes slideUpPopup{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}.closure-popup .c-icon{font-size:48px;margin-bottom:16px}.closure-popup .c-title{font-size:20px;font-weight:700;color:#1a1a2e;margin-bottom:16px;line-height:1.4}.closure-popup .c-msg{font-size:15px;color:#444;line-height:1.7;margin-bottom:8px}.closure-popup .c-date{display:inline-block;background:#fff3cd;color:#856404;font-weight:600;padding:6px 18px;border-radius:8px;margin:12px 0;font-size:15px}.closure-popup .c-thanks{font-size:14px;color:#777;margin-top:8px;font-style:italic}.closure-popup .c-btn{margin-top:24px;background:#1a1a2e;color:#fff;border:none;padding:12px 36px;border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;transition:background .2s}.closure-popup .c-btn:hover{background:#16213e}
-/* --- Phase 2: Full-screen blocker --- */
-.closure-blocker{position:fixed;top:0;left:0;right:0;bottom:0;width:100vw;height:100vh;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);z-index:999999;display:flex;align-items:center;justify-content:center;padding:20px;pointer-events:all}.closure-blocker .b-inner{text-align:center;max-width:560px;width:100%;color:#fff}.closure-blocker .b-icon{font-size:64px;margin-bottom:24px;opacity:.9}.closure-blocker .b-title{font-size:26px;font-weight:700;margin-bottom:20px;line-height:1.3;letter-spacing:-.5px}.closure-blocker .b-divider{width:60px;height:3px;background:rgba(255,255,255,.3);margin:0 auto 24px;border-radius:2px}.closure-blocker .b-msg{font-size:16px;color:rgba(255,255,255,.85);line-height:1.8;margin-bottom:12px}.closure-blocker .b-date{display:inline-block;background:rgba(255,193,7,.15);border:1px solid rgba(255,193,7,.3);color:#ffd54f;font-weight:700;padding:10px 28px;border-radius:10px;margin:16px 0;font-size:18px;letter-spacing:.5px}.closure-blocker .b-note{font-size:14px;color:rgba(255,255,255,.5);margin-top:20px;line-height:1.6}.closure-blocker .b-thanks{font-size:15px;color:rgba(255,255,255,.65);margin-top:16px;font-style:italic}
-</style>
-<div id="closureNotice"></div>
-<script>
-(function(){
-  // --- Phase 1: Popup (today → 16/05/2026) ---
-  // --- Phase 2: Blocker (from 17/05/2026) ---
-  var now = new Date();
-  var cutoff = new Date(2026, 4, 17); // May 17, 2026 (month is 0-indexed)
-  var container = document.getElementById('closureNotice');
 
-  if (now < cutoff) {
-    // Phase 1: dismissable popup
-    if (document.cookie.indexOf('closure_ack=1') !== -1) return;
-    container.innerHTML =
-      '<div class="closure-overlay" id="closurePopup">' +
-        '<div class="closure-popup">' +
-          '<div class="c-icon">🔔</div>' +
-          '<div class="c-title">Thông báo ngừng hoạt động</div>' +
-          '<div class="c-msg">Website này sẽ chính thức ngừng hoạt động vào ngày</div>' +
-          '<div class="c-date">📅 17/05/2026</div>' +
-          '<div class="c-msg">Toàn bộ nội dung và dữ liệu trên trang sẽ bị xóa.<br>Website sẽ không còn được quản lý bởi người tạo.</div>' +
-          '<div class="c-thanks">Cảm ơn bạn đã ủng hộ trong thời gian qua. 💛</div>' +
-          '<button class="c-btn" onclick="dismissClosure()">Đã hiểu</button>' +
-        '</div>' +
-      '</div>';
-    window.dismissClosure = function(){
-      document.getElementById('closurePopup').style.display='none';
-      document.cookie='closure_ack=1;path=/;max-age=259200'; // 3 days
-    };
-  } else {
-    // Phase 2: full-screen blocker — no dismiss
-    container.innerHTML =
-      '<div class="closure-blocker" id="closureBlocker">' +
-        '<div class="b-inner">' +
-          '<div class="b-icon">⚠️</div>' +
-          '<div class="b-title">Website đã ngừng hoạt động</div>' +
-          '<div class="b-divider"></div>' +
-          '<div class="b-msg">Trang web này chính thức đóng cửa từ ngày</div>' +
-          '<div class="b-date">📅 17/05/2026</div>' +
-          '<div class="b-msg">Toàn bộ nội dung và dữ liệu trên trang đã bị xóa.<br>Website không còn được quản lý bởi người tạo.</div>' +
-          '<div class="b-thanks">Cảm ơn bạn đã ủng hộ trong thời gian qua.</div>' +
-          '<div class="b-note">Tên miền sẽ hết hạn và website sẽ ngừng tồn tại trong thời gian tới.</div>' +
-        '</div>' +
-      '</div>';
-    // Block all interaction
-    document.body.style.overflow='hidden';
-    document.documentElement.style.overflow='hidden';
-    var blocker=document.getElementById('closureBlocker');
-    blocker.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();},true);
-    document.addEventListener('click',function(e){e.stopPropagation();e.preventDefault();},true);
-    document.addEventListener('keydown',function(e){e.preventDefault();e.stopPropagation();},true);
-    document.addEventListener('visibilitychange',function(){
-      if(!document.hidden){blocker.style.display='flex';document.body.style.overflow='hidden';}
-    });
-  }
-})();
-</script>
-<!-- End Site Closure Notice -->
+
+
 
 
 
